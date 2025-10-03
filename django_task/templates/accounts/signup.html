@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Create Account</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 50vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .signup-container {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 500px;
+    }
+    
+    .signup-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .signup-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 6px;
+    }
+    
+    .signup-subtitle {
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+    
+    .form-label {
+      display: block;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+    }
+    
+    .required {
+      color: #dc3545;
+    }
+    
+    .form-input, .form-select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 2px solid #e1e5e9;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      background: #f8f9fa;
+    }
+    
+    .form-input:focus, .form-select:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      background: white;
+    }
+    
+    .file-input-wrapper {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+    
+    .file-input {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+    
+    .file-input-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 14px;
+      border: 2px dashed #e1e5e9;
+      border-radius: 8px;
+      background: #f8f9fa;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.85rem;
+    }
+    
+    .file-input-button:hover {
+      border-color: #667eea;
+      background: #f0f2ff;
+      color: #667eea;
+    }
+    
+    .file-input-button.has-file {
+      border-color: #28a745;
+      background: #f0fff4;
+      color: #28a745;
+    }
+    
+    .address-section {
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+    
+    .address-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 15px;
+    }
+    
+    .signup-button {
+      width: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      margin-bottom: 15px;
+    }
+    
+    .signup-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+    
+    .signup-button:active {
+      transform: translateY(0);
+    }
+    
+    .login-link {
+      text-align: center;
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    .login-link a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+    
+    .errorlist {
+      list-style: none;
+      padding: 0;
+      margin: 8px 0 0 0;
+    }
+    
+    .errorlist li {
+      color: #dc3545;
+      font-size: 0.85rem;
+      background: #f8d7da;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid #f5c6cb;
+    }
+    
+    .non-field-errors {
+      margin-bottom: 20px;
+    }
+    
+    .non-field-errors .errorlist li {
+      background: #f8d7da;
+      border: 1px solid #f5c6cb;
+      color: #721c24;
+    }
+    
+    @media (max-width: 768px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .signup-container {
+        padding: 25px 15px;
+        max-width: 400px;
+      }
+      
+      .signup-title {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="signup-container">
+    <div class="signup-header">
+      <h1 class="signup-title">Create Account</h1>
+      <p class="signup-subtitle">Sign up as a Patient or Doctor</p>
+    </div>
+    
+    {% if form.non_field_errors %}
+      <div class="non-field-errors">
+        <ul class="errorlist">
+          {% for error in form.non_field_errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+    
+    <form method="post" enctype="multipart/form-data" novalidate>
+      {% csrf_token %}
+      
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="{{ form.first_name.id_for_label }}" class="form-label">
+            First Name <span class="required">*</span>
+          </label>
+          {{ form.first_name }}
+          {% if form.first_name.errors %}
+            <ul class="errorlist">
+              {% for error in form.first_name.errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+        
+        <div class="form-group">
+          <label for="{{ form.last_name.id_for_label }}" class="form-label">
+            Last Name <span class="required">*</span>
+          </label>
+          {{ form.last_name }}
+          {% if form.last_name.errors %}
+            <ul class="errorlist">
+              {% for error in form.last_name.errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="{{ form.username.id_for_label }}" class="form-label">
+          Username <span class="required">*</span>
+        </label>
+        {{ form.username }}
+        {% if form.username.errors %}
+          <ul class="errorlist">
+            {% for error in form.username.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+      
+      <div class="form-group">
+        <label for="{{ form.email.id_for_label }}" class="form-label">
+          Email <span class="required">*</span>
+        </label>
+        {{ form.email }}
+        {% if form.email.errors %}
+          <ul class="errorlist">
+            {% for error in form.email.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label">Profile Picture</label>
+        <div class="file-input-wrapper">
+          {{ form.profile_picture }}
+          <div class="file-input-button" id="file-button">
+            Choose File
+          </div>
+        </div>
+        {% if form.profile_picture.errors %}
+          <ul class="errorlist">
+            {% for error in form.profile_picture.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+      
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="{{ form.password1.id_for_label }}" class="form-label">
+            Password <span class="required">*</span>
+          </label>
+          {{ form.password1 }}
+          {% if form.password1.errors %}
+            <ul class="errorlist">
+              {% for error in form.password1.errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+        
+        <div class="form-group">
+          <label for="{{ form.password2.id_for_label }}" class="form-label">
+            Confirm Password <span class="required">*</span>
+          </label>
+          {{ form.password2 }}
+          {% if form.password2.errors %}
+            <ul class="errorlist">
+              {% for error in form.password2.errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="{{ form.role.id_for_label }}" class="form-label">
+          User Type <span class="required">*</span>
+        </label>
+        {{ form.role }}
+        {% if form.role.errors %}
+          <ul class="errorlist">
+            {% for error in form.role.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+      
+      <div class="address-section">
+        <div class="address-title">Address</div>
+        
+        <div class="form-group">
+          <label for="{{ form.address_line1.id_for_label }}" class="form-label">
+            Address Line 1 <span class="required">*</span>
+          </label>
+          {{ form.address_line1 }}
+          {% if form.address_line1.errors %}
+            <ul class="errorlist">
+              {% for error in form.address_line1.errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="{{ form.city.id_for_label }}" class="form-label">
+              City <span class="required">*</span>
+            </label>
+            {{ form.city }}
+            {% if form.city.errors %}
+              <ul class="errorlist">
+                {% for error in form.city.errors %}
+                  <li>{{ error }}</li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+          
+          <div class="form-group">
+            <label for="{{ form.state.id_for_label }}" class="form-label">
+              State <span class="required">*</span>
+            </label>
+            {{ form.state }}
+            {% if form.state.errors %}
+              <ul class="errorlist">
+                {% for error in form.state.errors %}
+                  <li>{{ error }}</li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="{{ form.pincode.id_for_label }}" class="form-label">
+            Pincode <span class="required">*</span>
+          </label>
+          {{ form.pincode }}
+          {% if form.pincode.errors %}
+            <ul class="errorlist">
+              {% for error in form.pincode.errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+      </div>
+      
+      <button type="submit" class="signup-button">Sign Up</button>
+    </form>
+    
+    <div class="login-link">
+      Already have an account? <a href="{% url 'login' %}">Login here</a>
+    </div>
+  </div>
+  
+  <script>
+    // File input handling
+    const fileInput = document.querySelector('input[type="file"]');
+    const fileButton = document.getElementById('file-button');
+    
+    fileInput.addEventListener('change', function(e) {
+      if (e.target.files.length > 0) {
+        fileButton.textContent = e.target.files[0].name;
+        fileButton.classList.add('has-file');
+      } else {
+        fileButton.textContent = 'Choose File';
+        fileButton.classList.remove('has-file');
+      }
+    });
+    
+    // Add classes to form inputs
+    document.addEventListener('DOMContentLoaded', function() {
+      const inputs = document.querySelectorAll('input, select');
+      inputs.forEach(input => {
+        if (input.type !== 'file') {
+          input.classList.add('form-input');
+        }
+        if (input.tagName === 'SELECT') {
+          input.classList.add('form-select');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
